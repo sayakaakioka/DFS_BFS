@@ -29,9 +29,13 @@ void draw() {
 
 void dfs(int idx) {
   Node currentNode = nodeList.get(idx);
+  currentNode.arrived(true);
+  
   int nextIdx = currentNode.neighbors();
   while (nextIdx != -1) {
-    dfs(nextIdx);
+    if(!nodeList.get(nextIdx).arrived()){
+      dfs(nextIdx);
+    }
     nextIdx = currentNode.neighbors();
   }
   
@@ -43,7 +47,7 @@ void dfs(int idx) {
 Node createNode(int idx) {
   String name[] = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"};
   Node node = new Node(name[idx]);
-  for (int i=idx; i<M[0].length; i++) {
+  for (int i=0; i<M[0].length; i++) {
     if (M[idx][i] == 1) {
       node.neighbors(i);
     }

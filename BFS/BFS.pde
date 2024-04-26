@@ -37,21 +37,27 @@ void bfs() {
   }
   
   Node currentNode = nodeList.get(currentIdx);
+  currentNode.arrived(true);
+  
   int nextIdx = currentNode.neighbors();
   while (nextIdx != -1) {
     // 現在のノードから繋がっているノードをキューに入れる
-    enq(nextIdx);
+    if(!nodeList.get(nextIdx).arrived()){
+      enq(nextIdx);
+    }
     nextIdx = currentNode.neighbors();
   }
   
-  bfs();
-
+  if(q.size() > 0){
+    bfs();
+  }
+  
   // このノードの探索は終了
-  print(currentNode.name());
 }
 
 void enq(int idx) {
   q.addLast(idx);
+  println("enq(): " + printQueue());
 }
 
 int deq() {
@@ -62,6 +68,16 @@ int deq() {
   catch(Exception e) {
     ret = -1;
   }
+  
+  println("deq(): " + printQueue());
+  return ret;
+}
+
+String printQueue(){
+  String ret = "";
+  for(int idx: q){
+    ret = ret + nodeList.get(idx).name() + " ";
+  }
   return ret;
 }
 
@@ -69,7 +85,7 @@ int deq() {
 Node createNode(int idx) {
   String name[] = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"};
   Node node = new Node(name[idx]);
-  for (int i=idx; i<M[0].length; i++) {
+  for (int i=0; i<M[0].length; i++) {
     if (M[idx][i] == 1) {
       node.neighbors(i);
     }
